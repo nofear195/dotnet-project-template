@@ -1,7 +1,7 @@
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using Dapper;
+using Microsoft.Data.SqlClient;
 
 namespace dotnet_project_template.Services.DapperORM
 {
