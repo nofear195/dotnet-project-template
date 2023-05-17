@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*!
+=======
+﻿/*!
+>>>>>>> e289dfd (init commit)
  * jQuery Validation Plugin v1.17.0
  *
  * https://jqueryvalidation.org/
@@ -1598,4 +1602,8 @@ if ( $.ajaxPrefilter ) {
 	};
 }
 return $;
+<<<<<<< HEAD
 }));
+=======
+}));
+>>>>>>> e289dfd (init commit)
