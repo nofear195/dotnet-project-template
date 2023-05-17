@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace dotnet_project_template.DataContext
 {
     public class AppContext:DbContext

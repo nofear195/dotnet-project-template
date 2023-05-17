@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 /**
-=======
-﻿/**
->>>>>>> e289dfd (init commit)
  * @license
  * Unobtrusive validation support library for jQuery and jQuery Validate
  * Copyright (c) .NET Foundation. All rights reserved.
@@ -437,7 +433,4 @@
 
     return $jQval.unobtrusive;
 }));
-<<<<<<< HEAD
-=======
 
->>>>>>> e289dfd (init commit)
