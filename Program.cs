@@ -1,3 +1,5 @@
+using dotnet_project_template.Services.DapperORM;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +7,9 @@ builder.Services.AddControllersWithViews();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Register dapper in scope
+builder.Services.AddScoped<IDapper, Dapperr>();
 
 var app = builder.Build();
 
