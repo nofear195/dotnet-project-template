@@ -11,6 +11,8 @@ namespace dotnet_project_template.Services.DapperORM
         private readonly IConfiguration _config;
         private string Connectionstring;
 
+
+
         public Dapperr(IConfiguration config)
         {
             _config = config;
@@ -23,10 +25,49 @@ namespace dotnet_project_template.Services.DapperORM
 
         }
 
+        public DbConnection GetDbconnection()
+        {
+            return new NpgsqlConnection(Connectionstring);
+        }
+
+        private T Transaction<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure)
+        {
+            T result;
+            using IDbConnection db = GetDbconnection();
+            try
+            {
+                if (db.State == ConnectionState.Closed)
+                    db.Open();
+
+                using var tran = db.BeginTransaction();
+                try
+                {
+                    result = db.Query<T>(sp, parms, commandType: commandType, transaction: tran).FirstOrDefault();
+                    tran.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    throw ex;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (db.State == ConnectionState.Open)
+                    db.Close();
+            }
+
+            return result;
+        }
+
         public int Execute(string sp, object[] items, CommandType commandType = CommandType.StoredProcedure)
         {
             int affectedRows = 0;
-            using IDbConnection db = new NpgsqlConnection(Connectionstring);
+            using IDbConnection db = GetDbconnection();
             try
             {
                 if (db.State == ConnectionState.Closed)
@@ -59,87 +100,24 @@ namespace dotnet_project_template.Services.DapperORM
 
         public T Get<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.Text)
         {
-            using IDbConnection db = new NpgsqlConnection(Connectionstring);
+            using IDbConnection db = GetDbconnection();
             return db.Query<T>(sp, parms, commandType: commandType).FirstOrDefault();
         }
 
         public List<T> GetAll<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure)
         {
-            using IDbConnection db = new NpgsqlConnection(Connectionstring);
+            using IDbConnection db = GetDbconnection();
             return db.Query<T>(sp, parms, commandType: commandType).ToList();
-        }
-
-        public DbConnection GetDbconnection()
-        {
-            return new NpgsqlConnection(Connectionstring);
         }
 
         public T Insert<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure)
         {
-            T result;
-            using IDbConnection db = new NpgsqlConnection(Connectionstring);
-            try
-            {
-                if (db.State == ConnectionState.Closed)
-                    db.Open();
-
-                using var tran = db.BeginTransaction();
-                try
-                {
-                    result = db.Query<T>(sp, parms, commandType: commandType, transaction: tran).FirstOrDefault();
-                    tran.Commit();
-                }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    throw ex;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                if (db.State == ConnectionState.Open)
-                    db.Close();
-            }
-
-            return result;
+            return Transaction<T>(sp,parms,commandType);
         }
 
         public T Update<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure)
         {
-            T result;
-            using IDbConnection db = new NpgsqlConnection(Connectionstring);
-            try
-            {
-                if (db.State == ConnectionState.Closed)
-                    db.Open();
-
-                using var tran = db.BeginTransaction();
-                try
-                {
-                    result = db.Query<T>(sp, parms, commandType: commandType, transaction: tran).FirstOrDefault();
-                    tran.Commit();
-                }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    throw ex;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                if (db.State == ConnectionState.Open)
-                    db.Close();
-            }
-
-            return result;
+            return Transaction<T>(sp,parms,commandType);
         }
     }
 }
