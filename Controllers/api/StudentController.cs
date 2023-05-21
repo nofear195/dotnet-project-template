@@ -14,17 +14,19 @@ namespace dotnet_project_template.Controllers.api
     [Route("api/[controller]")]
     public class StudentController : Controller
     {
-        private readonly IDapper _dapper;
+        private readonly IDapperORM _dapper;
+        private readonly string _tableName;
 
-        public StudentController(IDapper dapper)
+        public StudentController(IDapperORM dapper)
         {
             _dapper = dapper;
+            _tableName = "Student";
         }
 
         [HttpGet]
         public async Task<List<Student>> Get()
         {
-            string sql = $"Select * from Student";
+            string sql = $"Select * from {_tableName}";
             var result = await Task.FromResult(_dapper.GetAll<Student>
                 (sql, null, commandType: CommandType.Text));
             return result;
@@ -33,7 +35,7 @@ namespace dotnet_project_template.Controllers.api
         [HttpGet("{Id}")]
         public async Task<Student> Get(int Id)
         {
-            string sql = $"Select * from Student where Id = {Id}";
+            string sql = $@"Select * from {_tableName} where Id = {Id}";
             var result = await Task.FromResult(_dapper.Get<Student>
                 (sql, null, commandType: CommandType.Text));
             return result;
@@ -42,7 +44,7 @@ namespace dotnet_project_template.Controllers.api
         [HttpPost]
         public async Task<int> Post(Student data)
         {
-            string sql = $@"INSERT INTO Student VALUES ({data.Id},{data.Name},{data.Age})";
+            string sql = $@"INSERT INTO {_tableName} VALUES ({data.Id},{data.Name},{data.Age})";
             var result = await Task.FromResult(_dapper.Insert<int>
                 (sql,null, commandType: CommandType.Text));
             return result;
@@ -51,7 +53,7 @@ namespace dotnet_project_template.Controllers.api
         [HttpPut]
         public async Task<int> Put(Student data)
         {
-            string sql = $@"UPDATE Student SET Name={data.Name},Age={data.Age} WHERE ID={data.Id}";
+            string sql = $@"UPDATE {_tableName} SET Name={data.Name},Age={data.Age} WHERE ID={data.Id}";
             var result = await Task.FromResult(_dapper.Update<int>
             (sql, null, commandType: CommandType.Text));
             return result;
@@ -60,7 +62,7 @@ namespace dotnet_project_template.Controllers.api
         [HttpDelete("{id}")]
         public async Task<int> Delete(int id)
         {
-            string sql = $@"DELETE FROM Student WHERE ID={id}";
+            string sql = $@"DELETE FROM {_tableName} WHERE ID={id}";
             var result = await Task.FromResult(_dapper.Execute
             (sql, null, commandType: CommandType.Text));
             return result;

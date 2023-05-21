@@ -6,14 +6,14 @@ using Npgsql;
 
 namespace dotnet_project_template.Services.DapperORM
 {
-    public class Dapperr : IDapper
+    public class DapperORM : IDapperORM
     {
         private readonly IConfiguration _config;
         private string Connectionstring;
 
 
 
-        public Dapperr(IConfiguration config)
+        public DapperORM(IConfiguration config)
         {
             _config = config;
             var defaultConnection = _config["ConnectionStrings:DefaultConnection"];
@@ -30,7 +30,7 @@ namespace dotnet_project_template.Services.DapperORM
             return new NpgsqlConnection(Connectionstring);
         }
 
-        private T Transaction<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure)
+        private T Transaction<T>(string sp, DynamicParameters? parms, CommandType commandType = CommandType.StoredProcedure)
         {
             T result;
             using IDbConnection db = GetDbconnection();
@@ -98,26 +98,31 @@ namespace dotnet_project_template.Services.DapperORM
             return affectedRows;
         }
 
-        public T Get<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.Text)
+        public T Get<T>(string sp, DynamicParameters? parms, CommandType commandType = CommandType.Text)
         {
             using IDbConnection db = GetDbconnection();
             return db.Query<T>(sp, parms, commandType: commandType).FirstOrDefault();
         }
 
-        public List<T> GetAll<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure)
+        public List<T> GetAll<T>(string sp, DynamicParameters? parms, CommandType commandType = CommandType.StoredProcedure)
         {
             using IDbConnection db = GetDbconnection();
             return db.Query<T>(sp, parms, commandType: commandType).ToList();
         }
 
-        public T Insert<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure)
+        public T Insert<T>(string sql, DynamicParameters? parms, CommandType commandType = CommandType.StoredProcedure)
         {
-            return Transaction<T>(sp,parms,commandType);
+            return Transaction<T>(sql, parms,commandType);
         }
 
-        public T Update<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure)
+        public T Update<T>(string sql, DynamicParameters? parms, CommandType commandType = CommandType.StoredProcedure)
         {
-            return Transaction<T>(sp,parms,commandType);
+            return Transaction<T>(sql, parms,commandType);
+        }
+
+        public T Delete<T>(string sql, DynamicParameters? parms, CommandType commandType = CommandType.StoredProcedure)
+        {
+            return Transaction<T>(sql, parms, commandType);
         }
     }
 }

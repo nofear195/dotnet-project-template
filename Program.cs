@@ -9,7 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Register dapper in scope
-builder.Services.AddScoped<IDapper, Dapperr>();
+builder.Services.AddScoped<IDapperORM, DapperORM>();
 
 var app = builder.Build();
 
