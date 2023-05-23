@@ -18,10 +18,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controllers\api\" />
-    <None Remove="DataContext\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\api\" />
-    <Folder Include="DataContext\" />
   </ItemGroup>
 </Project>

@@ -27,44 +27,55 @@ namespace dotnet_project_template.Controllers.api
         public async Task<List<Student>> Get()
         {
             string sql = $"Select * from {_tableName}";
-            var result = await Task.FromResult(_dapper.GetAll<Student>
-                (sql, null, commandType: CommandType.Text));
+            var result = await Task.FromResult(_dapper.GetAll<Student>(sql, null));
             return result;
         }
 
-        [HttpGet("{Id}")]
-        public async Task<Student> Get(int Id)
+        [HttpGet("{id}")]
+        public async Task<Student> Get(int id)
         {
-            string sql = $@"Select * from {_tableName} where Id = {Id}";
-            var result = await Task.FromResult(_dapper.Get<Student>
-                (sql, null, commandType: CommandType.Text));
-            return result;
+            string sql = $@"Select * from {_tableName} WHERE ID=@id";
+
+            DynamicParameters dynamicParameters = new DynamicParameters();
+            dynamicParameters.Add("@id", id);
+
+            var result = await Task.FromResult(_dapper.Get<Student>(sql, dynamicParameters));
+            return result == null ? new Student() : result;
         }
 
         [HttpPost]
         public async Task<int> Post(Student data)
         {
-            string sql = $@"INSERT INTO {_tableName} VALUES ({data.Id},{data.Name},{data.Age})";
-            var result = await Task.FromResult(_dapper.Insert<int>
-                (sql,null, commandType: CommandType.Text));
+            string sql = $@"INSERT INTO {_tableName} VALUES (@ID,@Name,@Age)";
+
+            DynamicParameters dynamicParameters = new DynamicParameters();
+            dynamicParameters.AddDynamicParams(data);
+
+            var result = await Task.FromResult(_dapper.Insert<int>(sql,dynamicParameters));
             return result;
         }
 
         [HttpPut]
         public async Task<int> Put(Student data)
         {
-            string sql = $@"UPDATE {_tableName} SET Name={data.Name},Age={data.Age} WHERE ID={data.Id}";
-            var result = await Task.FromResult(_dapper.Update<int>
-            (sql, null, commandType: CommandType.Text));
+            string sql = $@"UPDATE {_tableName} SET Name=@Name,Age=@Age WHERE ID=@Id";
+
+            DynamicParameters dynamicParameters = new DynamicParameters();
+            dynamicParameters.AddDynamicParams(data);
+
+            var result = await Task.FromResult(_dapper.Update<int>(sql, dynamicParameters));
             return result;
         }
 
         [HttpDelete("{id}")]
         public async Task<int> Delete(int id)
         {
-            string sql = $@"DELETE FROM {_tableName} WHERE ID={id}";
-            var result = await Task.FromResult(_dapper.Execute
-            (sql, null, commandType: CommandType.Text));
+            string sql = $@"DELETE FROM {_tableName} WHERE ID=@id";
+
+            DynamicParameters dynamicParameters = new DynamicParameters();
+            dynamicParameters.Add("@id", id);
+
+            var result = await Task.FromResult(_dapper.Delete<int>(sql, dynamicParameters));
             return result;
         }
     }
