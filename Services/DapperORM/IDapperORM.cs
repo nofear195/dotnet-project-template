@@ -7,10 +7,10 @@ namespace dotnet_project_template.Services.DapperORM
     public interface IDapperORM : IDisposable
     {
         DbConnection GetDbconnection();
-        List<T> GetAll<T>(string sql, DynamicParameters? dynamicParameters);
-        T? Get<T>(string sql, DynamicParameters? dynamicParameters);
-        int Insert<T>(string sql, DynamicParameters? dynamicParameters);
-        int Update<T>(string sql, DynamicParameters? dynamicParameters);
-        int Delete<T>(string sql, DynamicParameters? dynamicParameters);
+        List<T> GetAll<T>(string sql, DynamicParameters? dynamicParameters = null);
+        T? Get<T>(string sql, DynamicParameters? dynamicParameters = null);
+        int Insert<T>(string sql, DynamicParameters? dynamicParameters = null);
+        int Update<T>(string sql, DynamicParameters? dynamicParameters = null);
+        int Delete<T>(string sql, DynamicParameters? dynamicParameters = null);
     }
 }

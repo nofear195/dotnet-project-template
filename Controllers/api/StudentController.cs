@@ -27,7 +27,8 @@ namespace dotnet_project_template.Controllers.api
         public async Task<List<Student>> Get()
         {
             string sql = $"Select * from {_tableName}";
-            var result = await Task.FromResult(_dapper.GetAll<Student>(sql, null));
+
+            var result = await Task.FromResult(_dapper.GetAll<Student>(sql));
             return result;
         }
 

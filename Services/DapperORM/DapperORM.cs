@@ -28,7 +28,7 @@ namespace dotnet_project_template.Services.DapperORM
             return new NpgsqlConnection(Connectionstring);
         }
 
-        private int Transaction<T>(string sp, DynamicParameters? dynamicParameters)
+        private int Transaction<T>(string sp, DynamicParameters? dynamicParameters = null)
         {
             int rowsAffected;
             using IDbConnection db = GetDbconnection();
@@ -64,29 +64,29 @@ namespace dotnet_project_template.Services.DapperORM
             return rowsAffected;
         }
 
-        public T? Get<T>(string sql, DynamicParameters? dynamicParameters)
+        public T? Get<T>(string sql, DynamicParameters? dynamicParameters = null)
         {
             using IDbConnection db = GetDbconnection();
             return db.Query<T>(sql, dynamicParameters).FirstOrDefault();
         }
 
-        public List<T> GetAll<T>(string sql, DynamicParameters? dynamicParameters)
+        public List<T> GetAll<T>(string sql, DynamicParameters? dynamicParameters = null)
         {
             using IDbConnection db = GetDbconnection();
             return db.Query<T>(sql, dynamicParameters).ToList();
         }
 
-        public int Insert<T>(string sql, DynamicParameters? dynamicParameters)
+        public int Insert<T>(string sql, DynamicParameters? dynamicParameters = null)
         {
             return Transaction<T>(sql, dynamicParameters);
         }
 
-        public int Update<T>(string sql, DynamicParameters? dynamicParameters)
+        public int Update<T>(string sql, DynamicParameters? dynamicParameters = null)
         {
             return Transaction<T>(sql, dynamicParameters);
         }
 
-        public int Delete<T>(string sql, DynamicParameters? dynamicParameters)
+        public int Delete<T>(string sql, DynamicParameters? dynamicParameters = null)
         {
             return Transaction<T>(sql, dynamicParameters);
         }
