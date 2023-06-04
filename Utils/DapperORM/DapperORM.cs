@@ -1,10 +1,9 @@
 using System.Data;
 using System.Data.Common;
 using Dapper;
-using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace dotnet_project_template.Services.DapperORM
+namespace dotnet_project_template.Utils.DapperORM
 {
     public class DapperORM : IDapperORM
     {

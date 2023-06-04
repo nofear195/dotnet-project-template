@@ -18,8 +18,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controllers\api\" />
+    <None Remove="Repositories\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\api\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>

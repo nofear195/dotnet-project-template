@@ -1,4 +1,4 @@
-using dotnet_project_template.Services.DapperORM;
+using dotnet_project_template.Utils.DapperORM;
 
 var builder = WebApplication.CreateBuilder(args);
 

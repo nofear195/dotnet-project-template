@@ -1,8 +1,7 @@
-using System.Data;
 using System.Data.Common;
 using Dapper;
 
-namespace dotnet_project_template.Services.DapperORM
+namespace dotnet_project_template.Utils.DapperORM
 {
     public interface IDapperORM : IDisposable
     {
